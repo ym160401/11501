@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#fff7ed" />
+  <meta name="description" content="楊梅高中圖書館每週一書介紹" />
+  <title>楊梅高中圖書館每週一書介紹</title>
+  <style>
+    :root {
+      --bg: #fffaf3;
+      --panel: rgba(255,255,255,.84);
+      --text: #233044;
+      --muted: #687386;
+      --line: rgba(35,48,68,.10);
+      --brand: #ff7a59;
+      --brand-2: #ffbd59;
+      --brand-3: #69c8c3;
+      --brand-4: #7aa7ff;
+      --shadow: 0 18px 50px rgba(70, 52, 35, .12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,189,89,.28), transparent 24rem),
+        radial-gradient(circle at 90% 16%, rgba(105,200,195,.24), transparent 26rem),
+        radial-gradient(circle at 74% 80%, rgba(122,167,255,.20), transparent 28rem),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    button, select, input { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .page-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 64px 0 34px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(1px);
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      background: rgba(255,122,89,.15);
+      top: -80px;
+      right: 6%;
+    }
+
+    .hero::after {
+      width: 140px;
+      height: 140px;
+      background: rgba(105,200,195,.18);
+      left: 2%;
+      bottom: -60px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .brand-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid rgba(255,122,89,.18);
+      background: rgba(255,255,255,.72);
+      border-radius: 999px;
+      color: #9a4e38;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(70,52,35,.06);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(120deg, #e85f3e, #e99d23 48%, #3a9f9a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    .hero-art {
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .book-stack {
+      position: relative;
+      width: 260px;
+      height: 250px;
+      animation: float 4.8s ease-in-out infinite;
+    }
+
+    .book {
+      position: absolute;
+      left: 24px;
+      width: 220px;
+      height: 54px;
+      border-radius: 11px 18px 18px 11px;
+      box-shadow: 0 12px 25px rgba(35,48,68,.10);
+    }
+
+    .book::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 100%;
+      left: 14px;
+      top: 0;
+      border-right: 2px dashed rgba(255,255,255,.62);
+    }
+
+    .b1 { bottom: 28px; transform: rotate(-5deg); background: #ff7a59; }
+    .b2 { bottom: 84px; left: 3px; transform: rotate(4deg); background: #ffbd59; }
+    .b3 { bottom: 140px; left: 30px; transform: rotate(-2deg); background: #69c8c3; }
+    .b4 { bottom: 196px; left: 12px; transform: rotate(5deg); background: #7aa7ff; }
+
+    .spark {
+      position: absolute;
+      font-size: 28px;
+      animation: twinkle 2.5s ease-in-out infinite;
+      user-select: none;
+    }
+    .s1 { top: 18px; right: 6px; }
+    .s2 { left: 0; top: 76px; animation-delay: .7s; }
+    .s3 { right: 22px; bottom: 0; animation-delay: 1.2s; }
+
+    .status-wrap {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.75);
+      border-radius: 20px;
+      padding: 16px 18px;
+      box-shadow: 0 10px 30px rgba(70,52,35,.07);
+      backdrop-filter: blur(12px);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: .92rem;
+      margin-bottom: 6px;
+    }
+
+    .stat strong {
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      margin: 18px 0 26px;
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 10px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 22px;
+      box-shadow: 0 12px 36px rgba(70,52,35,.10);
+      backdrop-filter: blur(16px);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 13px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+    }
+
+    .search-box input {
+      width: 100%;
+      min-width: 0;
+      padding: 11px 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .control {
+      min-height: 46px;
+      padding: 0 14px;
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .control:hover { transform: translateY(-1px); }
+
+    .control.primary {
+      color: white;
+      background: linear-gradient(135deg, #ff7a59, #f46e4c);
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 10px 0 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+    }
+
+    .section-head p {
+      margin: 7px 0 0;
+      color: var(--muted);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+      padding-bottom: 50px;
+    }
+
+    .week-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: var(--shadow);
+      transform: translateY(10px);
+      opacity: 0;
+      animation: cardIn .5s ease forwards;
+    }
+
+    .week-card button {
+      display: block;
+      width: 100%;
+      padding: 0;
+      background: transparent;
+      text-align: left;
+      color: inherit;
+    }
+
+    .cover-wrap {
+      position: relative;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255,189,89,.22), rgba(105,200,195,.18)),
+        #f7f1e7;
+    }
+
+    .cover-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform .45s ease, filter .3s ease;
+    }
+
+    .week-card:hover img { transform: scale(1.025); }
+
+    .week-badge {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      z-index: 2;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.90);
+      color: #9a4e38;
+      font-weight: 800;
+      font-size: .9rem;
+      box-shadow: 0 6px 18px rgba(35,48,68,.09);
+      backdrop-filter: blur(10px);
+    }
+
+    .new-badge {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      z-index: 2;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #fff;
+      background: #ff7a59;
+      font-weight: 800;
+      font-size: .82rem;
+      animation: pulse 1.9s ease-in-out infinite;
+    }
+
+    .card-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 15px 15px;
+    }
+
+    .card-body strong { font-size: 1.02rem; }
+    .card-body span { color: var(--muted); font-size: .9rem; }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 48px 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 2px dashed rgba(35,48,68,.12);
+      border-radius: 24px;
+      background: rgba(255,255,255,.58);
+    }
+
+    .empty .emoji { font-size: 3rem; display: block; margin-bottom: 8px; }
+
+    footer {
+      padding: 22px 0 42px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .92rem;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      padding: 24px;
+      background: rgba(20,26,38,.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .lightbox.show {
+      display: grid;
+      grid-template-columns: 70px minmax(0,1fr) 70px;
+      align-items: center;
+      gap: 12px;
+      animation: fadeIn .2s ease;
+    }
+
+    .lightbox-stage {
+      max-width: min(520px, calc(100vw - 190px));
+      max-height: calc(100vh - 48px);
+      justify-self: center;
+      position: relative;
+    }
+
+    .lightbox img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100vh - 48px);
+      border-radius: 20px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.38);
+    }
+
+    .lightbox-label {
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      padding: 7px 12px;
+      white-space: nowrap;
+      color: #fff;
+      background: rgba(20,26,38,.70);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+    }
+
+    .round-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      color: white;
+      font-size: 1.55rem;
+      border: 1px solid rgba(255,255,255,.18);
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .round-btn:hover {
+      background: rgba(255,255,255,.20);
+      transform: scale(1.05);
+    }
+
+    .close-btn {
+      position: fixed;
+      right: 20px;
+      top: 18px;
+      z-index: 110;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 150;
+      transform: translate(-50%, 18px);
+      padding: 10px 15px;
+      border-radius: 999px;
+      color: white;
+      background: rgba(35,48,68,.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+
+    @keyframes twinkle {
+      0%,100% { transform: scale(.85) rotate(0deg); opacity: .55; }
+      50% { transform: scale(1.15) rotate(12deg); opacity: 1; }
+    }
+
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    @media (max-width: 980px) {
+      .gallery { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .hero-grid { grid-template-columns: 1fr .6fr; }
+      .toolbar { grid-template-columns: 1fr auto auto; }
+      .sound-btn { grid-column: 3; }
+      .refresh-btn { grid-column: 2; }
+    }
+
+    @media (max-width: 760px) {
+      .hero { padding-top: 36px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-art { min-height: 210px; }
+      .book-stack { transform: scale(.82); margin-top: -18px; }
+      .gallery { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+      .status-wrap { grid-template-columns: repeat(3, 1fr); }
+      .toolbar {
+        position: static;
+        grid-template-columns: 1fr 1fr;
+      }
+      .search-box { grid-column: 1 / -1; }
+      .sound-btn, .refresh-btn { grid-column: auto; }
+      .lightbox.show {
+        grid-template-columns: 46px minmax(0,1fr) 46px;
+        padding: 14px;
+      }
+      .lightbox-stage { max-width: calc(100vw - 126px); }
+      .round-btn { width: 44px; height: 44px; }
+    }
+
+    @media (max-width: 480px) {
+      .page-shell { width: min(100% - 20px, 1180px); }
+      .gallery { grid-template-columns: 1fr; }
+      .status-wrap { gap: 8px; }
+      .stat { padding: 13px 10px; border-radius: 16px; text-align: center; }
+      .stat span { font-size: .78rem; }
+      .stat strong { font-size: 1.15rem; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .toolbar { grid-template-columns: 1fr; }
+      .search-box { grid-column: auto; }
+      .lightbox.show {
+        grid-template-columns: 1fr;
+        place-items: center;
+      }
+      .lightbox-stage { max-width: calc(100vw - 28px); }
+      .lightbox .nav-btn { position: fixed; bottom: 18px; z-index: 120; }
+      #prevBtn { left: 18px; }
+      #nextBtn { right: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="page-shell hero-grid">
+      <div>
+        <div class="brand-chip">📚 楊梅高中圖書館 · Weekly Book</div>
+        <h1>每一週，<span class="gradient-text">遇見一本好書</span></h1>
+        <p>
+          「楊梅高中圖書館每週一書介紹」將每週精選的閱讀推薦集中在這裡。
+          點選封面即可放大閱讀，並可依週次快速搜尋與瀏覽。
+        </p>
+
+        <div class="status-wrap" aria-label="網站統計">
+          <div class="stat">
+            <span>目前已上架</span>
+            <strong id="publishedCount">偵測中…</strong>
+          </div>
+          <div class="stat">
+            <span>本學期規劃</span>
+            <strong>21 週</strong>
+          </div>
+          <div class="stat">
+            <span>最新一週</span>
+            <strong id="latestWeek">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="book-stack">
+          <div class="book b1"></div>
+          <div class="book b2"></div>
+          <div class="book b3"></div>
+          <div class="book b4"></div>
+          <div class="spark s1">✦</div>
+          <div class="spark s2">✧</div>
+          <div class="spark s3">✦</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="toolbar" aria-label="瀏覽工具">
+      <label class="search-box">
+        <span aria-hidden="true">🔎</span>
+        <input id="searchInput" type="search" inputmode="numeric" placeholder="輸入週次，例如：5 或 第5週" aria-label="搜尋週次">
+      </label>
+
+      <select id="sortSelect" class="control" aria-label="排序方式">
+        <option value="desc">最新在前</option>
+        <option value="asc">最早在前</option>
+      </select>
+
+      <button id="soundBtn" class="control sound-btn" type="button" aria-pressed="false">🔇 音效關閉</button>
+      <button id="refreshBtn" class="control primary refresh-btn" type="button">↻ 重新偵測</button>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>📖 每週一書</h2>
+          <p id="galleryHint">正在檢查已上傳的圖片…</p>
+        </div>
+      </div>
+
+      <div id="gallery" class="gallery" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    楊梅高中圖書館 · 每週一書介紹
+  </footer>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="圖片放大檢視">
+    <button id="closeBtn" class="round-btn close-btn" type="button" aria-label="關閉">×</button>
+    <button id="prevBtn" class="round-btn nav-btn" type="button" aria-label="上一週">‹</button>
+    <div class="lightbox-stage">
+      <img id="lightboxImg" src="" alt="">
+      <div id="lightboxLabel" class="lightbox-label"></div>
+    </div>
+    <button id="nextBtn" class="round-btn nav-btn" type="button" aria-label="下一週">›</button>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const TOTAL_WEEKS = 21;
+      const IMAGE_BASE = "./images/";
+      const imagePath = week => `${IMAGE_BASE}第${week}週.PNG`;
+
+      const gallery = document.getElementById("gallery");
+      const publishedCount = document.getElementById("publishedCount");
+      const latestWeek = document.getElementById("latestWeek");
+      const galleryHint = document.getElementById("galleryHint");
+      const searchInput = document.getElementById("searchInput");
+      const sortSelect = document.getElementById("sortSelect");
+      const soundBtn = document.getElementById("soundBtn");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightboxImg");
+      const lightboxLabel = document.getElementById("lightboxLabel");
+      const closeBtn = document.getElementById("closeBtn");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const toast = document.getElementById("toast");
+
+      let availableWeeks = [];
+      let soundEnabled = false;
+      let currentLightboxIndex = 0;
+
+      function playTone(freq = 520, duration = 0.045) {
+        if (!soundEnabled) return;
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioCtx();
+          const oscillator = ctx.createOscillator();
+          const gain = ctx.createGain();
+          oscillator.type = "sine";
+          oscillator.frequency.value = freq;
+          gain.gain.setValueAtTime(0.035, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+          oscillator.connect(gain);
+          gain.connect(ctx.destination);
+          oscillator.start();
+          oscillator.stop(ctx.currentTime + duration);
+          oscillator.addEventListener("ended", () => ctx.close());
+        } catch (_) {}
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove("show"), 1600);
+      }
+
+      function checkImage(week, cacheBust) {
+        return new Promise(resolve => {
+          const img = new Image();
+          const url = `${imagePath(week)}?v=${cacheBust}`;
+          img.onload = () => resolve({ week, url });
+          img.onerror = () => resolve(null);
+          img.src = url;
+        });
+      }
+
+      async function detectImages() {
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = "偵測中…";
+        gallery.innerHTML = `
+          <div class="empty">
+            <span class="emoji">📚</span>
+            正在檢查第 1～${TOTAL_WEEKS} 週圖片…
+          </div>`;
+        galleryHint.textContent = "正在檢查已上傳的圖片…";
+        publishedCount.textContent = "…";
+        latestWeek.textContent = "—";
+
+        const stamp = Date.now();
+        const results = await Promise.all(
+          Array.from({ length: TOTAL_WEEKS }, (_, i) => checkImage(i + 1, stamp))
+        );
+
+        availableWeeks = results.filter(Boolean);
+        updateStats();
+        renderGallery();
+
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = "↻ 重新偵測";
+        showToast(`已找到 ${availableWeeks.length} 週內容`);
+        playTone(660, 0.06);
+      }
+
+      function updateStats() {
+        publishedCount.textContent = `${availableWeeks.length} 週`;
+
+        if (availableWeeks.length) {
+          const maxWeek = Math.max(...availableWeeks.map(item => item.week));
+          latestWeek.textContent = `第 ${maxWeek} 週`;
+          galleryHint.textContent = `已自動偵測到 ${availableWeeks.length} 張圖片，點選封面可放大閱讀。`;
+        } else {
+          latestWeek.textContent = "尚未上架";
+          galleryHint.textContent = "目前尚未偵測到圖片，請將圖片放入 images 資料夾。";
+        }
+      }
+
+      function getFilteredWeeks() {
+        const raw = searchInput.value.trim();
+        const match = raw.match(/\d+/);
+        const targetWeek = match ? Number(match[0]) : null;
+
+        let list = [...availableWeeks];
+
+        if (targetWeek) {
+          list = list.filter(item => item.week === targetWeek);
+        }
+
+        list.sort((a, b) =>
+          sortSelect.value === "asc" ? a.week - b.week : b.week - a.week
+        );
+
+        return list;
+      }
+
+      function renderGallery() {
+        const list = getFilteredWeeks();
+        const newestWeek = availableWeeks.length
+          ? Math.max(...availableWeeks.map(item => item.week))
+          : null;
+
+        gallery.innerHTML = "";
+
+        if (!list.length) {
+          gallery.innerHTML = `
+            <div class="empty">
+              <span class="emoji">🔎</span>
+              找不到符合條件的週次。
+            </div>`;
+          return;
+        }
+
+        list.forEach((item, index) => {
+          const card = document.createElement("article");
+          card.className = "week-card";
+          card.style.animationDelay = `${Math.min(index * 45, 360)}ms`;
+
+          const button = document.createElement("button");
+          button.type = "button";
+          button.setAttribute("aria-label", `開啟第 ${item.week} 週介紹`);
+          button.innerHTML = `
+            <div class="cover-wrap">
+              <span class="week-badge">第 ${item.week} 週</span>
+              ${item.week === newestWeek ? '<span class="new-badge">NEW</span>' : ''}
+              <img src="${item.url}" alt="第 ${item.week} 週圖書介紹" loading="lazy" decoding="async">
+            </div>
+            <div class="card-body">
+              <strong>第 ${item.week} 週推薦</strong>
+              <span>點選放大 ↗</span>
+            </div>
+          `;
+
+          button.addEventListener("click", () => {
+            const sourceIndex = availableWeeks.findIndex(w => w.week === item.week);
+            openLightbox(sourceIndex);
+            playTone(560);
+          });
+
+          card.appendChild(button);
+          gallery.appendChild(card);
+        });
+      }
+
+      function openLightbox(index) {
+        if (!availableWeeks.length) return;
+        currentLightboxIndex = Math.max(0, Math.min(index, availableWeeks.length - 1));
+        updateLightbox();
+        lightbox.classList.add("show");
+        document.body.style.overflow = "hidden";
+        closeBtn.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("show");
+        document.body.style.overflow = "";
+        playTone(420);
+      }
+
+      function updateLightbox() {
+        const item = availableWeeks[currentLightboxIndex];
+        lightboxImg.src = item.url;
+        lightboxImg.alt = `第 ${item.week} 週圖書介紹`;
+        lightboxLabel.textContent = `第 ${item.week} 週`;
+        prevBtn.disabled = currentLightboxIndex <= 0;
+        nextBtn.disabled = currentLightboxIndex >= availableWeeks.length - 1;
+        prevBtn.style.opacity = prevBtn.disabled ? ".35" : "1";
+        nextBtn.style.opacity = nextBtn.disabled ? ".35" : "1";
+      }
+
+      function moveLightbox(direction) {
+        const nextIndex = currentLightboxIndex + direction;
+        if (nextIndex < 0 || nextIndex >= availableWeeks.length) return;
+        currentLightboxIndex = nextIndex;
+        updateLightbox();
+        playTone(direction > 0 ? 620 : 500);
+      }
+
+      soundBtn.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        soundBtn.setAttribute("aria-pressed", String(soundEnabled));
+        soundBtn.textContent = soundEnabled ? "🔊 音效開啟" : "🔇 音效關閉";
+        if (soundEnabled) {
+          playTone(700, 0.07);
+          showToast("音效已開啟");
+        } else {
+          showToast("音效已關閉");
+        }
+      });
+
+      refreshBtn.addEventListener("click", detectImages);
+      searchInput.addEventListener("input", renderGallery);
+      sortSelect.addEventListener("change", () => {
+        renderGallery();
+        playTone(480);
+      });
+
+      closeBtn.addEventListener("click", closeLightbox);
+      prevBtn.addEventListener("click", () => moveLightbox(-1));
+      nextBtn.addEventListener("click", () => moveLightbox(1));
+
+      lightbox.addEventListener("click", event => {
+        if (event.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener("keydown", event => {
+        if (!lightbox.classList.contains("show")) return;
+        if (event.key === "Escape") closeLightbox();
+        if (event.key === "ArrowLeft") moveLightbox(-1);
+        if (event.key === "ArrowRight") moveLightbox(1);
+      });
+
+      detectImages();
+    })();
+  </script>
+</body>
+</html>
